@@ -1,7 +1,7 @@
 import fastapi
 import sqlite
 from pydantic import BaseModel
-from fastapi.middleware import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 conn = sqlite3.connect("sql/contactos.db")
 
@@ -14,9 +14,9 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins = origins,
-    allow_credentiales = True,
+    allow_credentials = True,
     allow_methods = ["*"],
-    allow_header = ["*"]
+    allow_headers = ["*"]
 )
 
 class Contacto(BaseModel):
@@ -43,9 +43,9 @@ async def obtener_contactos();
 """Todos los contactos"""
     c = conn.cursor()
     c.execute('SELECT * FROM contactos;')
-    respone =[]
+    response = []
     for row in c:
-        contacto = {"email":row[0], "nombre":row[1], "telefono":row[2]}
+        contacto = {"email":row[0],"nombre":row[1], "telefono":row[2]}
         response.append(contacto)
     return response
 
@@ -64,7 +64,7 @@ async def actualizar_contacto(email: str, contacto: Contacto):
     """Actualiza contacto"""
     c = conn.cursor()
     c.execute('UPDATE contactos SET nombre = ?, telefono = ? WHERE email = ?',
-        (contacto.nombre, contacto.telefono, email))
+              (contacto.nombre, contacto.telefono, email))
     conn.commit()
     return contacto
 
