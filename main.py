@@ -7,6 +7,7 @@ conn = sqlite3.connect("sql/contactos.db")
 
 app = fastapi.FastAPI()
 
+# Hola 
 origins = [
     "https://herokufrontend-9f0e84a2ceb0.herokuapp.com"
 ]
