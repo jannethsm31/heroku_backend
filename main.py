@@ -1,5 +1,5 @@
 import fastapi
-import sqlite
+import sqlite3
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -8,7 +8,7 @@ conn = sqlite3.connect("sql/contactos.db")
 app = fastapi.FastAPI()
 
 origins = [
-    "heroku http"
+    ""
 ]
 
 app.add_middleware(
@@ -19,28 +19,30 @@ app.add_middleware(
     allow_headers = ["*"]
 )
 
+
 class Contacto(BaseModel):
     email : str
-    nombre : str 
+    nombre : str
     telefono : str
+
 
 @app.get("/")
 def inicio():
-    return {'Developer by': 'Yo'}
+    return {'Developer by':'yo'}
+
 
 @app.post("/contactos")
 async def crear_contacto(contacto: Contacto):
-    """Nuevo contacto"""
+    """Crea un nuevo contacto."""
     c = conn.cursor()
     c.execute('INSERT INTO contactos (email, nombre, telefono) VALUES (?, ?, ?)',
-            (contacto.email, contacto.nombre, contacto.telefono))
-
+              (contacto.email, contacto.nombre, contacto.telefono))
     conn.commit()
     return contacto
 
 @app.get("/contactos")
-async def obtener_contactos();
-"""Todos los contactos"""
+async def obtener_contactos():
+    """Obtiene todos los contactos."""
     c = conn.cursor()
     c.execute('SELECT * FROM contactos;')
     response = []
@@ -49,19 +51,21 @@ async def obtener_contactos();
         response.append(contacto)
     return response
 
+
 @app.get("/contactos/{email}")
-async def obtener_contactos(email: str):
-    """Contactos por email"""
+async def obtener_contacto(email: str):
+    """Obtiene un contacto por su email."""
     c = conn.cursor()
     c.execute('SELECT * FROM contactos WHERE email = ?', (email,))
     contacto = None
     for row in c:
-        contacto = {"email":row[0], "nombre":row[1], "telefono":row[2]}
+        contacto = {"email":row[0],"nombre":row[1],"telefono":row[2]}
     return contacto
+
 
 @app.put("/contactos/{email}")
 async def actualizar_contacto(email: str, contacto: Contacto):
-    """Actualiza contacto"""
+    """Actualiza un contacto."""
     c = conn.cursor()
     c.execute('UPDATE contactos SET nombre = ?, telefono = ? WHERE email = ?',
               (contacto.nombre, contacto.telefono, email))
@@ -70,7 +74,7 @@ async def actualizar_contacto(email: str, contacto: Contacto):
 
 @app.delete("/contactos/{email}")
 async def eliminar_contacto(email: str):
-    """Eliminar contacto"""
+    """Elimina un contacto."""
     c = conn.cursor()
     c.execute('DELETE FROM contactos WHERE email = ?', (email,))
     conn.commit()
