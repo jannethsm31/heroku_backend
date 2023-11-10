@@ -13,7 +13,7 @@ app = fastapi.FastAPI()
 # Permitimos los origenes para conectarse
 origins = [
     "http://localhost:8080",
-    "http://127.0.0.1:8080",
+    "http://127.0.0.0:8080",
     "https://herokufrontendsql-8c522739b4c3.herokuapp.com",
     "https://herokuflaskfront-60829f087760.herokuapp.com"
 ]
@@ -36,19 +36,18 @@ class Contacto(BaseModel):
 
 @app.get("/")
 def inicio():
-    return {'Developer by':'Patricio Vargas f:', "BD": "SQLite3"}
+    return {'Developer by':'yo'}
 
 # Rutas para las operaciones CRUD
 
 @app.post("/contactos")
 async def crear_contacto(contacto: Contacto):
-    """Crea un nuevo contacto."""
-    # TODO Inserta el contacto en la base de datos y responde con un mensaje
     c = conn.cursor()
     c.execute('INSERT INTO contactos (email, nombre, telefono) VALUES (?, ?, ?)',
               (contacto.email, contacto.nombre, contacto.telefono))
     conn.commit()
     return contacto
+
 
 @app.get("/contactos")
 async def obtener_contactos():
