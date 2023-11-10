@@ -15,8 +15,7 @@ origins = [
     "http://localhost:8080",
 <<<<<<< HEAD
     "http://127.0.0.0:8080",
-    "https://herokufrontendsql-8c522739b4c3.herokuapp.com",
-    "https://herokuflaskfront-60829f087760.herokuapp.com"
+    "https://herokufrontend-9f0e84a2ceb0.herokuapp.com",
 =======
     "http://127.0.0.1:8080",
 >>>>>>> 70d15643a7530fb281a59332eee9fe1f8fe21693
