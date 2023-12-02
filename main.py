@@ -35,7 +35,7 @@ class Contacto(BaseModel):
 
 @app.get("/")
 def inicio():
-    return {'Developer by':'yo'}
+    return {'Desarrollado por':'Janneth Santos MOlina'}
 
 # Rutas para las operaciones CRUD
 
